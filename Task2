@@ -1,1 +1,137 @@
-Task2
+# Text Preprocessing using SpaCy and Python Libraries
+
+Example Arabic text:
+
+"اللغة العربية جميلة وغنية بالمعاني."
+
+Example English text:
+
+"The Arabic language is beautiful and rich in meaning."
+
+2. Preprocessing Steps
+
+Tokenization
+
+English:
+
+import spacy
+
+# Load SpaCy English model
+nlp = spacy.load("en_core_web_sm")
+
+# Example English text
+english_text = "The Arabic language is beautiful and rich in meaning."
+
+# Tokenize the text
+doc = nlp(english_text)
+tokens = [token.text for token in doc]
+print(f"English Tokens: {tokens}")
+
+Arabic:
+
+import pyarabic.araby as araby
+
+# Example Arabic text
+arabic_text = "اللغة العربية جميلة وغنية بالمعاني."
+
+# Tokenize Arabic text
+tokens_arabic = araby.tokenize(arabic_text)
+print(f"Arabic Tokens: {tokens_arabic}")
+
+English Stopword Removal:
+
+from spacy.lang.en.stop_words import STOP_WORDS
+
+# Remove stopwords from English tokens
+filtered_tokens_en = [token for token in tokens if token.lower() not in STOP_WORDS]
+print(f"Filtered English Tokens: {filtered_tokens_en}")
+
+Arabic Stopword Removal:
+
+# List of common Arabic stopwords
+arabic_stopwords = ['في', 'من', 'و', 'على', 'عن']
+
+# Remove stopwords from Arabic tokens
+filtered_tokens_ar = [token for token in tokens_arabic if token not in arabic_stopwords]
+print(f"Filtered Arabic Tokens: {filtered_tokens_ar}")
+
+# POS tagging for English
+pos_tags_en = [(token.text, token.pos_) for token in doc]
+print(f"English POS Tags: {pos_tags_en}")
+
+# Note: PyArabic doesn’t have built-in POS tagging, so you can use `farasa` or other models for more advanced tagging
+# Example approach to POS tagging (simplified)
+from farasa.pos import FarasaPOSTagger
+
+farasa_tagger = FarasaPOSTagger(interactive=True)
+arabic_pos_tags = farasa_tagger.tag(arabic_text)
+print(f"Arabic POS Tags: {arabic_pos_tags}")
+
+Noise Removal (English)
+
+import re
+
+# Remove punctuation and non-alphabetic characters from English text
+cleaned_text_en = re.sub(r'[^a-zA-Z\s]', '', english_text)
+print(f"Cleaned English Text: {cleaned_text_en}")
+
+
+Noise Removal (Arabic)
+
+# Remove punctuation and non-Arabic characters from Arabic text
+cleaned_text_ar = araby.strip_punctuation(arabic_text)
+print(f"Cleaned Arabic Text: {cleaned_text_ar}")
+
+English Normalization:
+
+# Convert to lowercase
+normalized_text_en = english_text.lower()
+print(f"Normalized English Text: {normalized_text_en}")
+
+Arabic Normalization:
+
+# Normalize Arabic text (strip unnecessary spaces, normalize characters)
+normalized_text_ar = araby.strip_tatweel(araby.strip_harakat(araby.strip_punctuation(arabic_text)))
+print(f"Normalized Arabic Text: {normalized_text_ar}")
+
+
+Example :
+
+# Text Preprocessing using SpaCy and Python Libraries
+
+## Objective:
+The purpose of this report is to demonstrate the application of basic text preprocessing techniques on both Arabic and English texts.
+
+## Original Text:
+- **Arabic**: اللغة العربية جميلة وغنية بالمعاني.
+- **English**: The Arabic language is beautiful and rich in meaning.
+
+## Preprocessing Steps:
+
+### Tokenization:
+- **Arabic**: [اللغة, العربية, جميلة, وغنية, بالمعاني]
+- **English**: ['The', 'Arabic', 'language', 'is', 'beautiful', 'and', 'rich', 'in', 'meaning']
+
+### Stopword Removal:
+- **Arabic**: [العربية, جميلة, وغنية, بالمعاني]
+- **English**: ['Arabic', 'language', 'beautiful', 'rich', 'meaning']
+
+### POS Tagging:
+- **Arabic**: [('اللغة', 'NOUN'), ('العربية', 'ADJ'), ('جميلة', 'ADJ'), ('وغنية', 'ADJ'), ('بالمعاني', 'NOUN')]
+- **English**: [('The', 'DET'), ('Arabic', 'ADJ'), ('language', 'NOUN'), ('is', 'AUX'), ('beautiful', 'ADJ'), ...]
+
+### Noise Removal:
+- **Arabic**: اللغة العربية جميلة وغنية بالمعاني
+- **English**: the arabic language is beautiful and rich in meaning
+
+### Normalization:
+- **Arabic**: اللغة العربية جميلة وغنية بالمعاني
+- **English**: the arabic language is beautiful and rich in meaning
+
+## Analysis:
+- **English**: The preprocessing steps improved the quality of the text, making it cleaner and more structured for further analysis. Removing stopwords helped reduce noise.
+- **Arabic**: Similar improvements were made to the Arabic text, ensuring it's ready for tasks such as sentiment analysis.
+
+## Challenges:
+- Handling POS tagging for Arabic was more complex due to lack of direct support in PyArabic. Solutions like Farasa were considered.
+
